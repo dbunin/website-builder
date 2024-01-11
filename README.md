@@ -20,6 +20,7 @@
 - [ ] Create CMS for elements
 - [ ] Add sticky position
 - [ ] position: fixed shouldn't escape the canvas
+- [ ] Cleanup jotai families (and overall imporve usage of atoms)
 
 ## How to run the application
 
