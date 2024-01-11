@@ -18,6 +18,8 @@
 - [ ] Don't inline styles
 - [ ] Store state server size
 - [ ] Create CMS for elements
+- [ ] Add sticky position
+- [ ] position: fixed shouldn't escape the canvas
 
 ## How to run the application
 
