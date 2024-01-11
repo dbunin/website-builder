@@ -1,6 +1,5 @@
 import {
   Absolute,
-  ContainerBlock,
   Fixed,
   ImageBlock,
   Relative,
@@ -157,6 +156,7 @@ export const Block = ({ blockId }: { blockId: string }) => {
   return (
     <BlockComponent
       id={blockId}
+      // @ts-expect-error: TODO: figure out how to do typeToComponent in ts
       block={block.type}
       size={block.size}
       position={block.position}
