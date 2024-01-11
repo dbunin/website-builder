@@ -246,7 +246,7 @@ export const EditBar = () => {
   return (
     <div className="w-[440px] overflow-hidden border-r">
       <div id="edit-pane" className="flex h-full overflow-scroll p-1">
-        <Tabs defaultValue="account" className="w-full">
+        <Tabs defaultValue="design" className="w-full">
           <TabsList className="grid w-full grid-cols-2">
             <TabsTrigger value="design">Design</TabsTrigger>
             {(block?.type.type === "text" || block?.type.type === "image") && (
