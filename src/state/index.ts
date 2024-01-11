@@ -6,32 +6,75 @@ export type BlockTypes = "text" | "container" | "image";
 
 export type ContainerBlock = {
   type: "container";
-  width: number;
-  height: number;
   parentId?: string;
 };
 
 export type ImageBlock = {
   type: "image";
   source: string;
-  width: number;
-  height: number;
   parentId?: string;
 };
 
 export type TextBlock = {
   type: "text";
   content: string;
-  fontSize: number;
+  fontSize: string;
   parentId?: string;
+};
+
+const getInitialAbsolutePosition = (): Absolute => {
+  return {
+    position: "absolute",
+    top: "0px",
+    bottom: "auto",
+    right: "auto",
+    left: "0px",
+  };
+};
+
+const getInitialFixedPosition = (): Fixed => {
+  return {
+    position: "fixed",
+    top: "0px",
+    bottom: "auto",
+    right: "auto",
+    left: "0px",
+  };
+};
+
+const getInitialRelativePosition = (): Relative => {
+  return {
+    position: "relative",
+  };
+};
+
+export const getInitialPosition = (position: Positions) => {
+  if (position === "absolute") return getInitialAbsolutePosition();
+  if (position === "fixed") return getInitialFixedPosition();
+  return getInitialRelativePosition();
+};
+
+export type Size = {
+  width: string;
+  height: string;
+};
+
+export type Positions = "absolute" | "fixed" | "relative";
+
+export type Fixed = {
+  position: "fixed";
+  top: string;
+  bottom: string;
+  right: string;
+  left: string;
 };
 
 export type Absolute = {
   position: "absolute";
-  top: number;
-  bottom: number;
-  right: number;
-  left: number;
+  top: string;
+  bottom: string;
+  right: string;
+  left: string;
 };
 
 export type Relative = {
@@ -40,8 +83,9 @@ export type Relative = {
 
 export type BlockObject = {
   id: string;
+  size: Size;
   type: ContainerBlock | ImageBlock | TextBlock;
-  position: Absolute | Relative;
+  position: Absolute | Relative | Fixed;
 };
 
 export type CanvasState = Array<BlockObject>;
@@ -49,10 +93,12 @@ export type CanvasState = Array<BlockObject>;
 const getInitialContainer = (parentId: string | undefined): BlockObject => {
   return {
     id: uuidv4(),
+    size: {
+      width: "100%",
+      height: "300px",
+    },
     type: {
       type: "container",
-      width: 200,
-      height: 300,
       parentId: parentId,
     },
     position: {
@@ -64,12 +110,14 @@ const getInitialContainer = (parentId: string | undefined): BlockObject => {
 const getInitialImage = (parentId: string | undefined): BlockObject => {
   return {
     id: uuidv4(),
+    size: {
+      width: "auto",
+      height: "auto",
+    },
     type: {
       type: "image",
       source:
         "https://png.pngtree.com/png-vector/20191126/ourmid/pngtree-image-of-cute-radish-vector-or-color-illustration-png-image_2040180.jpg",
-      width: 200,
-      height: 300,
       parentId: parentId,
     },
     position: {
@@ -81,10 +129,14 @@ const getInitialImage = (parentId: string | undefined): BlockObject => {
 const getInitialText = (parentId: string | undefined): BlockObject => {
   return {
     id: uuidv4(),
+    size: {
+      width: "100%",
+      height: "auto",
+    },
     type: {
       type: "text",
       content: "New text",
-      fontSize: 14,
+      fontSize: "14px",
       parentId: parentId,
     },
     position: {
@@ -106,10 +158,12 @@ const initialState: CanvasState = [
   getInitialContainer(undefined),
   {
     id: "2",
+    size: {
+      width: "100px",
+      height: "100px",
+    },
     type: {
       type: "container",
-      width: 100,
-      height: 100,
       parentId: "1",
     },
     position: {
@@ -118,10 +172,14 @@ const initialState: CanvasState = [
   },
   {
     id: "3",
+    size: {
+      width: "100%",
+      height: "20px",
+    },
     type: {
       type: "text",
       content: "hello world",
-      fontSize: 14,
+      fontSize: "14px",
     },
     position: {
       position: "relative",
@@ -129,10 +187,14 @@ const initialState: CanvasState = [
   },
   {
     id: "4",
+    size: {
+      width: "100%",
+      height: "20px",
+    },
     type: {
       type: "text",
       content: "hello world",
-      fontSize: 14,
+      fontSize: "14px",
       parentId: "2",
     },
     position: {
@@ -141,10 +203,12 @@ const initialState: CanvasState = [
   },
   {
     id: "5",
+    size: {
+      width: "200px",
+      height: "300px",
+    },
     type: {
       type: "container",
-      width: 200,
-      height: 300,
     },
     position: {
       position: "relative",
@@ -152,7 +216,23 @@ const initialState: CanvasState = [
   },
 ];
 const canvasAtom = atom(initialState);
-export const activeBlock = atom<null | string>(null);
+export const activeBlockId = atom<null | string>(null);
+
+export const activeBlock = atom(
+  (get) => {
+    const blockId = get(activeBlockId);
+    const blocks = get(canvasAtom);
+
+    return blocks.find((block) => block.id === blockId);
+  },
+  (get, set, newBlock: BlockObject) => {
+    const canvas = get(canvasAtom);
+    set(
+      canvasAtom,
+      canvas.map((block) => (block.id === newBlock.id ? newBlock : block)),
+    );
+  },
+);
 
 const idsToBlockAtom = atom<
   Record<string, BlockObject>,

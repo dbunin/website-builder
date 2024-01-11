@@ -1,5 +1,6 @@
 import { Canvas } from "./components/canvas";
 import { ComponentList } from "./components/component-list";
+import { EditBar } from "./components/sidebar";
 
 function App() {
   return (
@@ -7,6 +8,7 @@ function App() {
       <div className="flex flex-1 overflow-hidden">
         <ComponentList />
         <Canvas />
+        <EditBar />
       </div>
     </div>
   );

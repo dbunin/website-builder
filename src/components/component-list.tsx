@@ -1,11 +1,11 @@
 import {
   BlockTypes,
-  activeBlock,
+  activeBlockId,
   getInitialBlock,
   idToBlockFamily,
   idToChildrenFamily,
 } from "@/state";
-import { useAtom, useAtomValue } from "jotai";
+import { useAtom } from "jotai";
 import { useMemo, useState } from "react";
 import { ChevronUpIcon, ChevronDownIcon } from "@radix-ui/react-icons";
 
@@ -36,7 +36,7 @@ const ListItem = ({
   onAdd: (blockType: BlockTypes) => void;
 }) => {
   const [expanded, setExpanded] = useState(true);
-  const [active, setActive] = useAtom(activeBlock);
+  const [active, setActive] = useAtom(activeBlockId);
   return (
     <ContextMenu>
       <ContextMenuTrigger>
