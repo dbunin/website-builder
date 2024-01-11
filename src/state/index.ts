@@ -84,6 +84,7 @@ export type Relative = {
 export type BlockObject = {
   id: string;
   size: Size;
+  // this about naming. type.type seems yikes, and position.position too.
   type: ContainerBlock | ImageBlock | TextBlock;
   position: Absolute | Relative | Fixed;
 };

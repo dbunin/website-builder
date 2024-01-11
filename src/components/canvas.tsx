@@ -8,7 +8,10 @@ export const Canvas = () => {
   const canvasBlocks = useAtomValue(valueAtom);
 
   return (
-    <div id="canvas" className="flex relative flex-col p-1 grow border h-full">
+    <div
+      id="canvas"
+      className="flex relative flex-col p-1 grow border h-full overflow-hidden"
+    >
       {canvasBlocks.map((block) => (
         <Block key={block.id} blockId={block.id} />
       ))}
