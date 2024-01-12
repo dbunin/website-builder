@@ -38,9 +38,9 @@ const ListItem = ({
   const [expanded, setExpanded] = useState(true);
   const [active, setActive] = useAtom(activeBlockId);
   return (
-    <ContextMenu>
-      <ContextMenuTrigger>
-        <li>
+    <li>
+      <ContextMenu>
+        <ContextMenuTrigger>
           <div
             onClick={() => setActive(blockId)}
             className="flex gap-1 items-center rounded-md border border-transparent pr-3 py-2 data-[active=true]:border-border data-[open=true]:bg-muted"
@@ -69,37 +69,37 @@ const ListItem = ({
               {label}
             </span>
           </div>
-          {childrenIds.length > 0 && expanded && (
-            <ul className="pl-4">
-              {childrenIds.map((blockId) => (
-                <Component blockId={blockId} />
-              ))}
-            </ul>
+        </ContextMenuTrigger>
+        <ContextMenuContent>
+          {type === "container" && (
+            <ContextMenuSub>
+              <ContextMenuSubTrigger>Add block</ContextMenuSubTrigger>
+              <ContextMenuSubContent className="w-48">
+                <ContextMenuItem onClick={() => onAdd("container")}>
+                  Container
+                </ContextMenuItem>
+                <ContextMenuItem onClick={() => onAdd("image")}>
+                  Image
+                </ContextMenuItem>
+                <ContextMenuItem onClick={() => onAdd("text")}>
+                  Text
+                </ContextMenuItem>
+              </ContextMenuSubContent>
+            </ContextMenuSub>
           )}
-        </li>
-      </ContextMenuTrigger>
-      <ContextMenuContent>
-        {type === "container" && (
-          <ContextMenuSub>
-            <ContextMenuSubTrigger>Add block</ContextMenuSubTrigger>
-            <ContextMenuSubContent className="w-48">
-              <ContextMenuItem onClick={() => onAdd("container")}>
-                Container
-              </ContextMenuItem>
-              <ContextMenuItem onClick={() => onAdd("image")}>
-                Image
-              </ContextMenuItem>
-              <ContextMenuItem onClick={() => onAdd("text")}>
-                Text
-              </ContextMenuItem>
-            </ContextMenuSubContent>
-          </ContextMenuSub>
-        )}
-        {onDelete && (
-          <ContextMenuItem onClick={onDelete}>Delete</ContextMenuItem>
-        )}
-      </ContextMenuContent>
-    </ContextMenu>
+          {onDelete && (
+            <ContextMenuItem onClick={onDelete}>Delete</ContextMenuItem>
+          )}
+        </ContextMenuContent>
+      </ContextMenu>
+      {childrenIds.length > 0 && expanded && (
+        <ul className="pl-4">
+          {childrenIds.map((blockId) => (
+            <Component blockId={blockId} />
+          ))}
+        </ul>
+      )}
+    </li>
   );
 };
 

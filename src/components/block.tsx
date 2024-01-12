@@ -2,6 +2,7 @@ import {
   Absolute,
   Fixed,
   ImageBlock,
+  Layout,
   Relative,
   Size,
   TextBlock,
@@ -46,26 +47,34 @@ const Text = ({
   isActive: boolean;
   onClick: (e: React.FormEvent<HTMLParagraphElement>) => void;
   onDelete: () => void;
-}) => (
-  <BlockContextMenu
-    onDelete={onDelete}
-    trigger={
-      <p
-        className="data-[active=true]:border-primary data-[active=true]:border-4"
-        data-active={isActive}
-        onClick={onClick}
-        style={{
-          ...position,
-          fontSize: block.fontSize,
-          height: size.height,
-          width: size.width,
-        }}
-      >
-        {block.content}
-      </p>
-    }
-  />
-);
+}) => {
+  const textDecorationStyles = {
+    fontWeight: block.textDecoration === "bold" ? "bold" : "",
+    fontStyle: block.textDecoration === "italic" ? "italic" : "",
+    textDecoration: block.textDecoration === "strikethrough" ? "underline" : "",
+  };
+  return (
+    <BlockContextMenu
+      onDelete={onDelete}
+      trigger={
+        <p
+          className="data-[active=true]:border-primary data-[active=true]:border-4"
+          data-active={isActive}
+          onClick={onClick}
+          style={{
+            ...position,
+            fontSize: block.fontSize,
+            height: size.height,
+            width: size.width,
+            ...textDecorationStyles,
+          }}
+        >
+          {block.content}
+        </p>
+      }
+    />
+  );
+};
 
 const Image = ({
   block,
@@ -104,6 +113,7 @@ const Container = ({
   position,
   size,
   id,
+  layout,
   isActive,
   onClick,
   onDelete,
@@ -111,6 +121,7 @@ const Container = ({
   position: Absolute | Relative | Fixed;
   size: Size;
   id: string;
+  layout: Layout;
   isActive: boolean;
   onClick: (e: React.FormEvent<HTMLDivElement>) => void;
   onDelete: () => void;
@@ -127,8 +138,20 @@ const Container = ({
           onClick={onClick}
           style={{
             ...position,
+            // layout
+            display: layout.display,
+            flexDirection: layout.reverse
+              ? `${layout.direction}-reverse`
+              : layout.direction,
+            justifyContent: layout.justifyContent,
+            alignItems: layout.align,
+            gap: layout.gap,
+
+            // size
             width: size.width,
             height: size.height,
+
+            // styles
             backgroundColor: "rgba(0, 0, 0, 0.5)",
           }}
         >
@@ -160,6 +183,7 @@ export const Block = ({ blockId }: { blockId: string }) => {
       block={block.type}
       size={block.size}
       position={block.position}
+      layout={block.layout}
       isActive={active === blockId}
       onDelete={() => setBlock(null)}
       onClick={(e) => {

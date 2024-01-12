@@ -38,10 +38,12 @@ Benefits of the approach:
 - [x] Positibility to delete frames
 - [ ] Positibility to edit Root as container
 - [ ] Positibility to define layout of container (flex, grid, etc)
+  - [ ] unset (block)
+  - [x] flex
+  - [ ] grid
 - [ ] Positibility to edit frame names
 - [ ] Don't inline styles
 - [ ] Store state server size
-- [ ] Create CMS for elements
 - [ ] Add sticky position
 - [ ] position: fixed shouldn't escape the canvas
 - [ ] Cleanup jotai families (and overall imporve usage of atoms)

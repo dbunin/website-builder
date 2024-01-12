@@ -20,6 +20,9 @@ import {
   SelectValue,
 } from "./ui/select";
 import { useEffect, useState } from "react";
+import { ToggleGroup, ToggleGroupItem } from "./ui/toggle-group";
+import { FontBoldIcon, FontItalicIcon } from "@radix-ui/react-icons";
+import { UnderlineIcon } from "lucide-react";
 
 const DataTab = () => {
   const [block, setBlock] = useAtom(activeBlock);
@@ -92,7 +95,7 @@ const DesignTab = () => {
                   position: getInitialPosition(position),
                 });
               }}
-              defaultValue={block.position.position}
+              value={block.position.position}
             >
               <SelectTrigger>
                 <SelectValue />
@@ -230,6 +233,161 @@ const DesignTab = () => {
                       ...block.type,
                       fontSize: e.target.value,
                     } as TextBlock,
+                  });
+                }}
+              />
+            </div>
+
+            <div className="space-y-1">
+              <ToggleGroup
+                className="justify-start"
+                value={
+                  block.type.textDecoration === "normal"
+                    ? undefined
+                    : block.type.textDecoration
+                }
+                onValueChange={(
+                  value: "italic" | "bold" | "strikethrough" | "",
+                ) => {
+                  setBlock({
+                    ...block,
+                    type: {
+                      ...block.type,
+                      textDecoration: value === "" ? "normal" : value,
+                    } as TextBlock,
+                  });
+                }}
+                type="single"
+                variant="outline"
+              >
+                <ToggleGroupItem value="bold" aria-label="Toggle bold">
+                  <FontBoldIcon className="h-4 w-4" />
+                </ToggleGroupItem>
+                <ToggleGroupItem value="italic" aria-label="Toggle italic">
+                  <FontItalicIcon className="h-4 w-4" />
+                </ToggleGroupItem>
+                <ToggleGroupItem
+                  value="strikethrough"
+                  aria-label="Toggle strikethrough"
+                >
+                  <UnderlineIcon className="h-4 w-4" />
+                </ToggleGroupItem>
+              </ToggleGroup>
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
+      {block.type.type === "container" && (
+        <Card>
+          <CardHeader>
+            <CardTitle>Layout</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-2">
+            <div className="space-y-1">
+              <Label>Direction</Label>
+              <Select
+                onValueChange={(direction: "column" | "row") => {
+                  setBlock({
+                    ...block,
+                    layout: {
+                      ...block.layout,
+                      display: "flex",
+                      direction: direction,
+                    },
+                  });
+                }}
+                value={block.layout.direction}
+              >
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="column">Column</SelectItem>
+                  <SelectItem value="row">Row</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="space-y-1">
+              <Label>Distribute content</Label>
+              <Select
+                onValueChange={(
+                  justifyConent:
+                    | "normal"
+                    | "start"
+                    | "end"
+                    | "center"
+                    | "between"
+                    | "around"
+                    | "evenly",
+                ) => {
+                  setBlock({
+                    ...block,
+                    layout: {
+                      ...block.layout,
+                      display: "flex",
+                      justifyContent: justifyConent,
+                    },
+                  });
+                }}
+                value={block.layout.justifyContent}
+              >
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="normal">Normal</SelectItem>
+                  <SelectItem value="start">Start</SelectItem>
+                  <SelectItem value="end">End</SelectItem>
+                  <SelectItem value="center">Center</SelectItem>
+                  <SelectItem value="between">Space between</SelectItem>
+                  <SelectItem value="around">Space around</SelectItem>
+                  <SelectItem value="evenly">Space evenly</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="space-y-1">
+              <Label>align content</Label>
+              <Select
+                onValueChange={(
+                  align: "flex-start" | "flex-end" | "center",
+                ) => {
+                  setBlock({
+                    ...block,
+                    layout: {
+                      ...block.layout,
+                      display: "flex",
+                      align: align,
+                    },
+                  });
+                }}
+                value={block.layout.align}
+              >
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="flex-start">Start</SelectItem>
+                  <SelectItem value="flex-end">End</SelectItem>
+                  <SelectItem value="center">Center</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="space-y-1">
+              <Label>Gap</Label>
+              <Input
+                id="content"
+                value={block.layout.gap}
+                onChange={(e) => {
+                  setBlock({
+                    ...block,
+                    layout: {
+                      ...block.layout,
+                      gap: e.target.value,
+                    },
                   });
                 }}
               />

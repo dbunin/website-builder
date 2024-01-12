@@ -19,6 +19,8 @@ export type TextBlock = {
   type: "text";
   content: string;
   fontSize: string;
+  color: string;
+  textDecoration: "normal" | "italic" | "bold" | "strikethrough";
   parentId?: string;
 };
 
@@ -81,10 +83,36 @@ export type Relative = {
   position: "relative";
 };
 
+export const getInitialLayout = (): Layout => ({
+  display: "flex",
+  direction: "row",
+  reverse: false,
+  justifyContent: "normal",
+  align: "flex-start",
+  gap: "0px",
+});
+
+export type Layout = {
+  display: "flex";
+  direction: "column" | "row";
+  reverse: boolean;
+  justifyContent:
+    | "normal"
+    | "start"
+    | "end"
+    | "center"
+    | "between"
+    | "around"
+    | "evenly";
+  align: "flex-start" | "flex-end" | "center";
+  gap: string;
+};
+
 export type BlockObject = {
   id: string;
   size: Size;
-  // this about naming. type.type seems yikes, and position.position too.
+  layout: Layout;
+  // think about naming. type.type seems yikes, and position.position too.
   type: ContainerBlock | ImageBlock | TextBlock;
   position: Absolute | Relative | Fixed;
 };
@@ -102,6 +130,7 @@ const getInitialContainer = (parentId: string | undefined): BlockObject => {
       type: "container",
       parentId: parentId,
     },
+    layout: getInitialLayout(),
     position: {
       position: "relative",
     },
@@ -115,6 +144,7 @@ const getInitialImage = (parentId: string | undefined): BlockObject => {
       width: "auto",
       height: "auto",
     },
+    layout: getInitialLayout(),
     type: {
       type: "image",
       source:
@@ -134,6 +164,7 @@ const getInitialText = (parentId: string | undefined): BlockObject => {
       width: "100%",
       height: "auto",
     },
+    layout: getInitialLayout(),
     type: {
       type: "text",
       content: "New text",
@@ -163,6 +194,7 @@ const initialState: CanvasState = [
       width: "100px",
       height: "100px",
     },
+    layout: getInitialLayout(),
     type: {
       type: "container",
       parentId: "1",
@@ -177,6 +209,7 @@ const initialState: CanvasState = [
       width: "100%",
       height: "20px",
     },
+    layout: getInitialLayout(),
     type: {
       type: "text",
       content: "hello world",
@@ -192,6 +225,7 @@ const initialState: CanvasState = [
       width: "100%",
       height: "20px",
     },
+    layout: getInitialLayout(),
     type: {
       type: "text",
       content: "hello world",
@@ -208,6 +242,7 @@ const initialState: CanvasState = [
       width: "200px",
       height: "300px",
     },
+    layout: getInitialLayout(),
     type: {
       type: "container",
     },
@@ -253,19 +288,20 @@ export const idToBlockFamily = atomFamily((id: string) =>
   atom(
     (get) => get(idsToBlockAtom)[id],
     (get, set, newBlock: BlockObject | null) => {
-      const prev = get(idsToBlockAtom);
       if (newBlock) {
-        set(idsToBlockAtom, { ...prev, [id]: newBlock });
+        const prev = get(idsToBlockAtom);
+        prev[id] = newBlock;
+        set(idsToBlockAtom, prev);
       } else {
-        delete prev[id];
-        const newBlocks = Object.values(prev)
+        const prev = get(canvasAtom);
+        const newBlocks = prev
+          .filter((block) => block.id !== id)
           .map((block) =>
             block.type.parentId === id
               ? { ...block, type: { ...block.type, parentId: undefined } }
               : block,
-          )
-          .reduce((acc, block) => ({ ...acc, [block.id]: block }), {});
-        set(idsToBlockAtom, newBlocks);
+          );
+        set(canvasAtom, newBlocks);
         // TODO clean up family atoms on delete
       }
     },
