@@ -3,6 +3,12 @@
 The Website builder is a React-based project that empowers users to create landing pages with ease. Users can add container elements, text, and images to their pages, then modify the appearance using a sidebar widget.
 While the current styling functionalities are somewhat limited, the project is actively working towards supporting flex and grid layouts.
 
+Benefits of the approach:
+
+- As I am not implementing any positioning logic, the canvas view would be the same as how it would look like in the end-product.
+- Adding new features would be just extending the rendering logic with new css values.
+- Possible to add animations and background effects just by adding predefined classes.
+
 ![Alt text](./resources/app.jpg?raw=true "Screenshot of the app")
 
 ## Technologies Used
@@ -12,6 +18,12 @@ While the current styling functionalities are somewhat limited, the project is a
 - Tailwind CSS (Future Integration): The project aims to integrate Tailwind CSS for efficient and consistent styling.
 - shadcn/ui: Component library
 - vite: for bundling
+
+## Things to work on
+
+- Better atom management. Especially in the sidebars.
+- Internal structure is not intuitive
+- Fixed position escapes the canvas
 
 ## Roadmap:
 
