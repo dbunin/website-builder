@@ -65,7 +65,7 @@ const ListItem = ({
             ) : (
               <div className="h-4 w-4"></div>
             )}
-            <span className="text-xs text-muted-foreground cursor-default flex-1">
+            <span className="text-xs truncate text-muted-foreground cursor-default flex-1">
               {label}
             </span>
           </div>
@@ -129,7 +129,7 @@ export const ComponentList = () => {
 
   return (
     <div className="w-[240px] overflow-hidden border-r">
-      <div id="component-list" className="flex h-full overflow-scroll p-1">
+      <div id="component-list" className="flex h-full overflow-y-auto p-1">
         <ul className="w-full">
           <ListItem
             blockId={null}

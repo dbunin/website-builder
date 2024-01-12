@@ -19,6 +19,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "./ui/select";
+import { useEffect, useState } from "react";
 
 const DataTab = () => {
   const [block, setBlock] = useAtom(activeBlock);
@@ -242,11 +243,20 @@ const DesignTab = () => {
 
 export const EditBar = () => {
   const block = useAtomValue(activeBlock);
+  const [activeTab, setActiveTab] = useState("design");
+
+  useEffect(() => {
+    setActiveTab("design");
+  }, [block?.id]);
 
   return (
     <div className="w-[440px] overflow-hidden border-r">
-      <div id="edit-pane" className="flex h-full overflow-scroll p-1">
-        <Tabs defaultValue="design" className="w-full">
+      <div id="edit-pane" className="flex h-full overflow-y-auto p-1">
+        <Tabs
+          value={activeTab}
+          onValueChange={(newActiveTab) => setActiveTab(newActiveTab)}
+          className="w-full"
+        >
           <TabsList className="grid w-full grid-cols-2">
             <TabsTrigger value="design">Design</TabsTrigger>
             {(block?.type.type === "text" || block?.type.type === "image") && (
