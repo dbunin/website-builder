@@ -19,7 +19,7 @@ export type TextBlock = {
   type: "text";
   content: string;
   fontSize: string;
-  color: string;
+  color?: string;
   textDecoration: "normal" | "italic" | "bold" | "strikethrough";
   parentId?: string;
 };
@@ -169,6 +169,7 @@ const getInitialText = (parentId: string | undefined): BlockObject => {
       type: "text",
       content: "New text",
       fontSize: "14px",
+      textDecoration: "normal",
       parentId: parentId,
     },
     position: {
@@ -214,6 +215,7 @@ const initialState: CanvasState = [
       type: "text",
       content: "hello world",
       fontSize: "14px",
+      textDecoration: "normal",
     },
     position: {
       position: "relative",
@@ -230,6 +232,7 @@ const initialState: CanvasState = [
       type: "text",
       content: "hello world",
       fontSize: "14px",
+      textDecoration: "normal",
       parentId: "2",
     },
     position: {
